@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speed Test</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Network performance</p>
+          <h1>Check your download & upload speed</h1>
+          <p class="subtitle">
+            Run a quick speed test and see what your connection can handle for
+            streaming, gaming, and video calls.
+          </p>
+        </div>
+        <button class="primary" id="start-test">Start speed test</button>
+      </header>
+
+      <section class="results">
+        <article class="card">
+          <h2>Download</h2>
+          <p class="value" id="download-value">-- Mbps</p>
+          <p class="status" id="download-status">Waiting for test</p>
+        </article>
+        <article class="card">
+          <h2>Upload</h2>
+          <p class="value" id="upload-value">-- Mbps</p>
+          <p class="status" id="upload-status">Waiting for test</p>
+        </article>
+        <article class="card">
+          <h2>Latency</h2>
+          <p class="value" id="latency-value">-- ms</p>
+          <p class="status" id="latency-status">Waiting for test</p>
+        </article>
+      </section>
+
+      <section class="capabilities">
+        <div class="capability-header">
+          <h2>What you can do with this speed</h2>
+          <p>We map your results to common online activities.</p>
+        </div>
+        <div class="capability-grid" id="capability-grid"></div>
+      </section>
+
+      <section class="footnote">
+        <h3>How it works</h3>
+        <p>
+          This test downloads and uploads small sample files to estimate your
+          throughput. Results can vary based on Wi-Fi quality, device load, and
+          network congestion.
+        </p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
