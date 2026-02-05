@@ -77,43 +77,33 @@ const measureLatency = async () => {
   return performance.now() - start;
 };
 
-const TEST_DURATION_SECONDS = 20;
-const DOWNLOAD_CHUNK_BYTES = 2_000_000;
-const UPLOAD_CHUNK_BYTES = 1_000_000;
-
-const measureDownload = async (durationSeconds) => {
+const measureDownload = async () => {
+  const downloadSize = 5000000;
   const start = performance.now();
-  let bytesReceived = 0;
-  while ((performance.now() - start) / 1000 < durationSeconds) {
-    const response = await fetch(
-      `https://speed.cloudflare.com/__down?bytes=${DOWNLOAD_CHUNK_BYTES}&_=${Date.now()}`,
-      { cache: "no-store" }
-    );
-    const buffer = await response.arrayBuffer();
-    bytesReceived += buffer.byteLength;
-  }
+  const response = await fetch(
+    `https://speed.cloudflare.com/__down?bytes=${downloadSize}&_=${Date.now()}`,
+    { cache: "no-store" }
+  );
+  await response.arrayBuffer();
   const duration = (performance.now() - start) / 1000;
-  return (bytesReceived * 8) / (duration * 1000000);
+  return (downloadSize * 8) / (duration * 1000000);
 };
 
-const measureUpload = async (durationSeconds) => {
-  const payload = new Uint8Array(UPLOAD_CHUNK_BYTES);
+const measureUpload = async () => {
+  const uploadSize = 2000000;
+  const payload = new Uint8Array(uploadSize);
   const start = performance.now();
-  let bytesSent = 0;
-  while ((performance.now() - start) / 1000 < durationSeconds) {
-    await fetch("https://speed.cloudflare.com/__up", {
-      method: "POST",
-      body: payload,
-    });
-    bytesSent += payload.byteLength;
-  }
+  await fetch("https://speed.cloudflare.com/__up", {
+    method: "POST",
+    body: payload,
+  });
   const duration = (performance.now() - start) / 1000;
-  return (bytesSent * 8) / (duration * 1000000);
+  return (uploadSize * 8) / (duration * 1000000);
 };
 
 const runSpeedTest = async () => {
   startButton.disabled = true;
-  downloadStatus.textContent = "Testing download speed (20s)...";
+  downloadStatus.textContent = "Testing download speed...";
   uploadStatus.textContent = "Waiting for download";
   latencyStatus.textContent = "Measuring latency...";
 
@@ -122,12 +112,12 @@ const runSpeedTest = async () => {
     latencyValue.textContent = formatLatency(latency);
     latencyStatus.textContent = "Latency measured";
 
-    const download = await measureDownload(TEST_DURATION_SECONDS);
+    const download = await measureDownload();
     downloadValue.textContent = formatSpeed(download);
     downloadStatus.textContent = "Download complete";
 
-    uploadStatus.textContent = "Testing upload speed (20s)...";
-    const upload = await measureUpload(TEST_DURATION_SECONDS);
+    uploadStatus.textContent = "Testing upload speed...";
+    const upload = await measureUpload();
     uploadValue.textContent = formatSpeed(upload);
     uploadStatus.textContent = "Upload complete";
 
